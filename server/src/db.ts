@@ -72,7 +72,6 @@ function seedData() {
       try {
         db.prepare(stmt).run();
       } catch (err) {
-        // Skip duplicate / constraint errors gracefully
         const msg = (err as Error).message;
         if (
           !msg.includes("UNIQUE constraint") &&
