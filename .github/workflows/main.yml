@@ -1,18 +1,24 @@
-name: Type Check
+name: CI
 
 on:
   push:
     branches: [master]
     paths:
       - "server/**"
+      - "client/**"
   pull_request:
     branches: [master]
     paths:
       - "server/**"
+      - "client/**"
 
 jobs:
-  lint-typecheck:
+  server:
     runs-on: ubuntu-latest
+    if: |
+      contains(github.event.head_commit.modified, 'server/') ||
+      contains(toJson(github.event.pull_request.changed_files), 'server/')  ||
+      github.event_name == 'pull_request'
 
     defaults:
       run:
@@ -34,7 +40,42 @@ jobs:
           cache-dependency-path: server/pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Run TypeScript type check
         run: pnpm run type-check
+
+  client:
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.head_commit.modified, 'client/') ||
+      contains(toJson(github.event.pull_request.changed_files), 'client/') ||
+      github.event_name == 'pull_request'
+
+    defaults:
+      run:
+        working-directory: ./client
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: client/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm run lint
+
+      - name: Run TypeScript type check
+        run: pnpm run typecheck
