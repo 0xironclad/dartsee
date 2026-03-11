@@ -4,27 +4,34 @@ export type GameListItem = {
   playerCount: number
 }
 
+export type PlayerStats = {
+  playerId: string
+  name: string | null
+  avgScorePerRound: number
+  missCount: number
+}
+
 export type GameDetail = {
   id: number
   type: string | null
   players: PlayerStats[]
 }
 
-export type PlayerStats = {
-  id: string
-  name: string | null
-  avgRoundScore: number
-  missCount: number
-}
-
 export type GameTypeStat = {
-  type: string | null
+  type: string
   count: number
 }
 
 export type HeatmapPoint = {
   x: number
   y: number
+  score: number
+  modifier: number
+}
+
+export type HeatmapResponse = {
+  gameType: string | null
+  throws: HeatmapPoint[]
 }
 
 async function apiFetch<T>(url: string): Promise<T> {
@@ -39,8 +46,10 @@ export const api = {
   listGames: () => apiFetch<GameListItem[]>("/api/games"),
   getGame: (id: number) => apiFetch<GameDetail>(`/api/games/${id}`),
   gameTypeStats: () => apiFetch<GameTypeStat[]>("/api/stats/game-types"),
-  heatmap: (gameId?: number) =>
-    apiFetch<HeatmapPoint[]>(
-      gameId ? `/api/stats/heatmap?gameId=${gameId}` : "/api/stats/heatmap"
+  heatmap: (gameType?: string) =>
+    apiFetch<HeatmapResponse>(
+      gameType
+        ? `/api/stats/heatmap?gameType=${encodeURIComponent(gameType)}`
+        : "/api/stats/heatmap"
     ),
 }
