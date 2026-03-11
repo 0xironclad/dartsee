@@ -6,19 +6,17 @@ on:
     paths:
       - "server/**"
       - "client/**"
+      - ".github/workflows/**"
   pull_request:
     branches: [master]
     paths:
       - "server/**"
       - "client/**"
+      - ".github/workflows/**"
 
 jobs:
   server:
     runs-on: ubuntu-latest
-    if: |
-      contains(github.event.head_commit.modified, 'server/') ||
-      contains(toJson(github.event.pull_request.changed_files), 'server/')  ||
-      github.event_name == 'pull_request'
 
     defaults:
       run:
@@ -40,6 +38,8 @@ jobs:
           cache-dependency-path: server/pnpm-lock.yaml
 
       - name: Install dependencies
+        # --ignore-scripts skips postinstall (pnpm rebuild better-sqlite3)
+        # which requires a native compiler and is not needed for type checking
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Run TypeScript type check
@@ -47,10 +47,6 @@ jobs:
 
   client:
     runs-on: ubuntu-latest
-    if: |
-      contains(github.event.head_commit.modified, 'client/') ||
-      contains(toJson(github.event.pull_request.changed_files), 'client/') ||
-      github.event_name == 'pull_request'
 
     defaults:
       run:
