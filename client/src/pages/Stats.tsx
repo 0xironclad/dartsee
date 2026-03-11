@@ -460,7 +460,7 @@ export default function Stats() {
       <div className="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
         {/* Donut chart */}
         {statsLoading ? (
-          <Skeleton className="h-[480px] rounded-xl" />
+          <Skeleton className="h-120 rounded-xl" />
         ) : (
           <GameTypeDonut types={types} />
         )}

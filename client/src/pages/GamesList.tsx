@@ -167,7 +167,7 @@ export default function GamesList() {
       {loading ? (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 12 }).map((_, i) => (
-            <Skeleton key={i} className="h-[88px] rounded-xl" />
+            <Skeleton key={i} className="h-22 rounded-xl" />
           ))}
         </div>
       ) : error ? (
