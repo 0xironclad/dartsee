@@ -1,6 +1,8 @@
 # Dartsee
 
 A full-stack darts analytics application. The server exposes a REST API backed by a SQLite database; the client is a React single-page application that visualises game and throw data.
+<img width="1789" height="1081" alt="Untitled" src="https://github.com/user-attachments/assets/fe9f3155-ae1e-42d0-8df5-2ad52089246f" />
+
 
 ---
 
