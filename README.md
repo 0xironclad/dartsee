@@ -21,6 +21,8 @@ Both packages are managed as a pnpm workspace.
 - Node.js 18+
 - pnpm
 
+> If you use npm, replace `pnpm install` with `npm install` and `pnpm dev` with `npm run dev` in all commands below. Note that the pnpm workspace setup (`pnpm-workspace.yaml`) is not used when running npm directly — each package must be installed and run from its own directory, which is how the steps below are already structured.
+
 ---
 
 ## Server
